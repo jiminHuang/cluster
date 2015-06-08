@@ -1,0 +1,3 @@
+progrium/consul
+gliderlabs/registrator
+swarm

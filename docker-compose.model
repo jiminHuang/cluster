@@ -1,0 +1,26 @@
+consul:
+    image: progrium/consul
+    hostname: {hostname} 
+    ports:
+        - "{ipaddress}:8300:8300"
+        - "{ipaddress}:8301:8301"
+        - "{ipaddress}:8301:8301/udp"
+        - "{ipaddress}:8302:8302"
+        - "{ipaddress}:8302:8302/udp"
+        - "{ipaddress}:8400:8400"
+        - "{ipaddress}:8500:8500"
+        - "172.17.42.1:53:53/udp"
+    command:
+         {command} -advertise {ipaddress}
+registrator:
+    image: progrium/registrator
+    hostname: {hostname}
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock
+    command:
+        consul://{ipaddress}:8500
+swarm:
+    image: swarm
+    hostname: {hostname}
+    command:
+        join --addr={ipaddress}:2375 consul://{joinip}:8500/swarm
