@@ -44,7 +44,7 @@ fi
 
 /sbin/ifconfig >/dev/null 
 if [ $? -eq 127 ];then
-    apt-get update >/dev/null 2>$1 && apt-get install net-tools -y >/dev/null 2>$1
+    apt-get update >/dev/null 2>&1 && apt-get install net-tools -y >/dev/null 2>&1
 fi
 
 if [[ -z $1 ]];then

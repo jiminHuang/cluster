@@ -66,7 +66,7 @@ Init(){
     
     if [ $? -eq 127 ];then
         echo -ne "\e[1;31m[未安装]\e[0m";
-        wget > /dev/null 2>$1;
+        wget > /dev/null 2>&1;
         if [ $? -eq 127 ];then
             apt-get update && apt-get install wget -y;
         fi
@@ -89,13 +89,13 @@ Init(){
 
     echo -n "检查docker-compose..."
 
-    docker-compose > /dev/null 2>$1
+    docker-compose > /dev/null 2>&1
     
     if [ $? -eq 127 ];then
         echo -ne "\e[1;31m[未安装]\e[0m";
-        curl > /dev/null 2>$1
+        curl > /dev/null 2>&1
         if [ $? -eq 127 ];then
-            sudo apt-get update > /dev/null 2>$1 && sudo apt-get install curl -y > /dev/null 2>$1
+            sudo apt-get update > /dev/null 2>&1 && sudo apt-get install curl -y > /dev/null 2>&1
         fi
         curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose;
         chmod +x /usr/local/bin/docker-compose;

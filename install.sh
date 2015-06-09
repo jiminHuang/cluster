@@ -64,4 +64,11 @@ if [ ! -d /etc/cron.minutely ];then
     mkdir /etc/cron.minutely
 fi
 
-echo "ip-change start > /dev/console" > /etc/cron.minutely/ipChangeTimer.sh
+minuteCron=`cat /etc/crontab | \
+    awk '/\* \* \* \* \* root run-parts \/etc\/cron.minutely/{print $1}'`
+
+if [[ -z $minuteCron ]];then
+    echo '* * * * * root run-parts /etc/cron.minutely' >> /etc/crontab
+fi
+
+echo -e "#!/bin/bash\nsudo ip-change start > /dev/console" > /etc/cron.minutely/ipChangeTimer

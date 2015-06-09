@@ -28,6 +28,6 @@ comm=`sed -n -e "1p" $RELOAD_FILE`
 
 echo "RELOAD 命令: $comm"
 
-echo "node-action reload $comm " > $ACTION_BASH
+echo "node-action reload $comm && node-action start" > $ACTION_BASH
 
 
