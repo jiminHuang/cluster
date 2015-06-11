@@ -358,8 +358,9 @@ Start(){
     fi
         
     echo "开启节点"
-    docker-compose -f $COMPOSE_FILE stop swarm
+    Stop
     echo y | sudo docker-compose -f $COMPOSE_FILE rm swarm 
+    sleep 5m
     docker-compose -f $COMPOSE_FILE up -d consul 
     docker-compose -f $COMPOSE_FILE up -d registrator 
     docker-compose -f $COMPOSE_FILE up -d swarm 
@@ -390,7 +391,7 @@ Refresh(){
     #检查curl是否安装
     curl 2>/dev/null 1>&2
     if [ ! $? -eq 0 ];then
-        apt-get update 2>/dev/null 1>&2 && apt-get install curl -y 2>/dev/null 1>&2
+        apt-get update 2>/dev/null 1>&2 && apt-get install curl -y 2>/dev/null 1>&2 
     fi
 
     curl http://$1:8500/v1/catalog/deregister -d "{\"Node\":\"$HOSTNAME\"}"
@@ -401,7 +402,7 @@ Refresh(){
 
 #链接ip地址变动监测脚本
 Link(){
-    ip-change reload "sudo node-action reload -i \$1 && sudo node-action stop && sleep 5m && sudo node-action start"
+    ip-change reload "sudo node-action reload -i \$1 && sudo node-action start"
 }
 
 #主测试，打印辅助信息
