@@ -73,13 +73,13 @@ Init(){
         
         #检查wget是否安装
         wget > /dev/null 2>&1;
-
+    
         if [ $? -eq 127 ];then
-            apt-get update && apt-get install wget -y;
+            apt-get update > /dev/null 2>&1 && apt-get install wget -y > /dev/null 2>&1;
         fi
 
         #拉取docker安装文件并安装
-        wget -qO- https://get.docker.com/ | sh;
+        wget -qO- https://get.docker.com/ | sudo sh;
 
         echo -ne "\b\b\b\b\b\b\b\b"
         echo -e "\e[1;32m[已安装]\e[0m";
@@ -91,7 +91,7 @@ Init(){
     echo -n "检查docker DNS设置..."
     
     #包括dockerDNS设置与开放2375对外接口
-    dnsSettings='DOCKER_OPTS=\"-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --dns 172.17.42.1 --dns-search service.consul\"'
+    dnsSettings='DOCKER_OPTS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --dns 172.17.42.1 --dns-search service.consul"'
 
     #配置文件中查找,没有则增加
     search=`cat /etc/default/docker | grep "$dnsSettings"` 
@@ -99,6 +99,10 @@ Init(){
     if [[ -z $search ]];then
         echo $dnsSettings >> /etc/default/docker
     fi
+
+    #重启docker服务
+    service docker restart    
+
     echo -e "\e[1;32m[已完成]\e[0m";
 
     
