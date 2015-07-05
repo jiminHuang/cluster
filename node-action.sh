@@ -94,7 +94,6 @@ Init(){
     dnsSettings='DOCKER_OPTS=\"-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --dns 172.17.42.1 --dns-search service.consul\"'
 
     #配置文件中查找,没有则增加
-    #TODO:并没有检测是否有部分重复设置，所以预先有过设置这里就会报错
     search=`cat /etc/default/docker | grep "$dnsSettings"` 
 
     if [[ -z $search ]];then
