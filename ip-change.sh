@@ -26,7 +26,7 @@ Usage(){
     echo "Commands:"
     echo -e "listen [webname]\t Start listening\t"
     echo -e "reload [bash]\t Reload the content of bash file\t"
-    echo -e "cron\t Create crontab task\t"
+    echo -e "cron [webname]\t Create crontab task\t"
     echo -e "test\t Test the command\t\n"
     exit -1
 }
@@ -354,7 +354,7 @@ TestActionWhenIpChange(){
 
 #创建crontab定时任务
 Cron(){
-    timer='* * * * * root sudo ip-change listen'
+    timer="* * * * * root sudo ip-change listen $1"
     if [[ -z `cat /etc/crontab | grep "$timer"` ]];then
         echo "$timer" >> /etc/crontab
     fi
@@ -382,7 +382,7 @@ case $1 in
     "listen") #listen命令获取当前IP,当IP改变时执行注册脚本
 
         #获取IP地址
-        ipAddress=`PresentIpAddress`
+        ipAddress=`PresentIpAddress $2`
         formerIpAddress=`IpAddressLog read`
     
         LogAction "当前IP地址为${ipAddress}"
@@ -402,7 +402,7 @@ case $1 in
         Reload $2;;
     
     "cron") #创建crontab定时任务
-        Cron;;
+        Cron $2;;
 
     "test") #test命令测试脚本
         tests=("TestPresentIpAddress" "TestGenerateStringWithDate" "TestLogAction" "TestCheckIp" "TestIpAddressLog" "TestActionWhenIpChange")
