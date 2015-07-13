@@ -136,6 +136,7 @@ Init(){
     images=`cat $RELATIVE_IMAGES`
     #当前已拉取的镜像
     pulled_images=`docker images | cut -d " " -f1`
+    echo $pulled_images
 
     echo "需要拉取以下镜像:"
 
@@ -144,17 +145,16 @@ Init(){
     do
         echo -n "$image..."
         searched=false;
-        for pulled_image in $images;
+        for pulled_image in $pulled_images;
         do
             if [[ $image == $pulled_image ]];then
-                echo -n "$pulled_image"
                 searched=true;
                 break;
             fi
         done
-        if [ ! $searched ];then
+        if  [ $searched == false ];then
             echo -ne "\e[1;31m[未拉取]\e[0m";
-            docker pull $image;
+            docker pull $image > /dev/null 2>&1;
             echo -ne "\b\b\b\b\b\b\b\b"
             echo -e "\e[1;32m[已拉取]\e[0m";
         else
